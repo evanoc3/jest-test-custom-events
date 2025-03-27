@@ -5,7 +5,7 @@ An NPM package which adds a custom matcher to [Jest](https://jestjs.io/) allowin
 ## Installation
 
 ```sh
-npm install jest-test-custom-events
+npm install -D jest-test-custom-events
 ```
 
 ## Example Usage

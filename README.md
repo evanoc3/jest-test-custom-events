@@ -1,6 +1,6 @@
 # Jest Test Custom Events
 
-An NPM package which adds a custom matcher to [Jest](https://jestjs.io/) allowing for testing of [CustomEvents](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent).
+An NPM package which adds a custom matcher, `toMatchCustomEvent` to [Jest](https://jestjs.io/) allowing for the testing of properties of [CustomEvents](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/CustomEvent).
 
 ## Installation
 
@@ -11,12 +11,11 @@ npm install -D jest-test-custom-events
 ## Example Usage
 
 ```typescript
-// file: example.test.ts
-import { test, expect } from "@jest/globals";
 import "jest-test-custom-events";
 
 test("example test", () => {
-	const customEvent = new CustomEvent("custom-event-name", {
+	// create a CustomEvent
+	const e = new CustomEvent("custom-event-name", {
 		bubbles: true,
 		composed: true,
 		detail: {
@@ -24,15 +23,21 @@ test("example test", () => {
 		}
 	});
 
-	expect(customEvent).toMatchCustomEvent({
+	// passes
+	expect(e).toMatchCustomEvent({
 		type: "custom-event-name",
 		bubbles: true,
 		composed: true,
 		detail: {
 			exampleProperty: true
 		}
-	})
+	});
+
+	// fails – the value for 'bubbles' does not match the received event
+	expect(e).toMatchCustomEvent({
+		bubbles: false
+	});
 });
 ```
 
-Well you may think you're able to do this with the built-in `isEqual` matcher, `CustomEvent` is implemented in such a way as to make it's properties non-enumerable, and hence almost always pass on deep equality checks.
+Counterintuitively, you cannot do this using the built-in `isEqual` matcher because `CustomEvent` is implemented in such a way as to make it's properties non-enumerable, and hence wil almost always pass deep equality checks.
